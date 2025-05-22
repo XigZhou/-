@@ -6,4 +6,4 @@
 # ./etth2.sh 
 # then you can trigger the module to run
 ## Dataset
-## The datasets can be obtained from Google Drive or Baidu Cloud.
+## The datasets can be obtained from [Google Drive or Baidu Cloud](https://drive.google.com/file/d/1l51QsKvQPcqILT3DwfjCgx8Dsg2rpjot/view?usp=drive_link).
