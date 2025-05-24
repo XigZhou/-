@@ -123,25 +123,7 @@ class Pamba_backbone(nn.Module):
         out = out.permute(0, 1, 3, 2) # B,N,E,D
         B, N, E, T = out.shape
 
-        #classify get the max value
-        b = self.linear(x)  # B,N,E
-        b = self.softmax(b)  # x: [B,N,embed_size]
-        b_max = torch.argmax(b, dim=2, keepdim=True)  # x: [B,N,1]
-        b_max = b_max.squeeze(-1)   # x: [B,N]
-        b_max = b_max + 1
-
-        # Mask the data
-        e_indices = torch.arange(E, device=out.device).view(1, 1, E)  # 形状 (1, 1, E)
-        e_indices_expanded = e_indices.expand(B, N, E)  # 扩展到 (B, N, E)
-
-        threshold = torch.where(b_max == E, E, b_max).unsqueeze(-1)  # 形状 (B, N, 1)
-
-        mask = (e_indices_expanded < threshold).unsqueeze(-1)  # 扩展维度到 (B, N, E, 1)
-
-        masked_out = torch.where(mask, out, torch.zeros_like(out))
-
-        return masked_out  # output x: [Batch, Channel ,H, input len]
-
+       
     def horizon(self, x):  # x B,T,N
         p = self.view_2(x).permute(0, 2, 1)  # B,T,N --->B,T,1--->B,1,T
         p = self.view_1(p)  # B,1,T----> B,1,D
@@ -183,7 +165,7 @@ class Pamba_backbone(nn.Module):
         out = self.act(self.linear2(out))
         out, _ = self.encoder(out)
 
-        out = self.act(self.gate(out)) * out
+       
         out = self.n_vars_header(out)
         out = self.dropout(out)
         z = self.patch_ffn(z) + out
